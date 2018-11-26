@@ -73,14 +73,17 @@ namespace Calculadora_lógica {
                 if (Elements[i].Type == ElementTypes.Operation) {
                     if (Elements[i].Operation == Operations.NOT) {
                         if (Elements.HasBefore(i))
-                            if (Elements.Before(i).Type != ElementTypes.Operation) throw new FormulaSyntaxException("Antes do NOT é permitido apenas nada ou operação");
+                            if (Elements.Before(i).Type != ElementTypes.Operation &&
+                                Elements.Before(i).Type != ElementTypes.OpeningParenthesis)
+                                throw new FormulaSyntaxException("Antes do NOT é permitido apenas nada, operação ou '('");
                         if (!Elements.HasAfter(i))
                             throw new FormulaSyntaxException("A fórmula não pode terminar com um NOT");
                         else
                             if (Elements.After(i).Type != ElementTypes.OpeningParenthesis
                                 && Elements.After(i).Type != ElementTypes.Variable
-                                && Elements.After(i).Type != ElementTypes.Constant)
-                            throw new FormulaSyntaxException("Após um NOT é permitido apenas constante, variável ou '('");
+                                && Elements.After(i).Type != ElementTypes.Constant
+                                && !(Elements.After(i).Type == ElementTypes.Operation && Elements.After(i).Operation == Operations.NOT))
+                            throw new FormulaSyntaxException("Após um NOT é permitido apenas constante, variável, outro NOT ou '('");
                     } else {
                         if (Elements.HasAfter(i) && Elements.After(i).Type == ElementTypes.Operation && Elements.After(i).Operation == Operations.NOT) continue; //If the current operation element is followed by a NOT operation it's valid and there's no need to check the rest
                         if (Elements.HasBefore(i) && Elements.HasAfter(i)) {
@@ -93,6 +96,8 @@ namespace Calculadora_lógica {
                         }
                     }
                 } else if (Elements[i].Type == ElementTypes.OpeningParenthesis) {
+                    if (Elements.After(i).Type == ElementTypes.ClosingParenthesis)
+                        throw new FormulaSyntaxException("É necessário uma expressão entre parenteses");
                     parenthesis++;
                 } else if (Elements[i].Type == ElementTypes.ClosingParenthesis) {
                     parenthesis--;

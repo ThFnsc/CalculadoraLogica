@@ -4,7 +4,9 @@ using System.Collections.Generic;
 namespace Calculadora_lógica {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine(". = AND\n+ = OR\n* = XOR\n~ = NOT\nColoque '!' no inicio para mostrar todo o cálculo\nPrecedência é respeitada: XOR > AND > OR"); //Intruções
+            Console.WriteLine(". = AND\n+ = OR\n* = XOR\n~ = NOT\n" +
+                "Precedência é respeitada: XOR > AND > OR\n" +
+                "Exemplo: S=A.B+A.~C+D.(A+B)"); //Intruções
             while (true) {
                 Console.Write("\nDigite o calculo: S=");
                 try {
