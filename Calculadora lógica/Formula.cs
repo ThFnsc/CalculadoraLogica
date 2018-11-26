@@ -61,6 +61,8 @@ namespace Calculadora_lógica {
         public static Formula Parse(string input) {
             List<char> characters = new List<char>(input.ToCharArray());
             characters.RemoveAll(character => character == ' ');
+            if (characters.Count == 0)
+                throw new FormulaSyntaxException("Fórmula vazia");
             Formula formula = new Formula();
             characters.ForEach(character => formula.Elements.Add(Element.Parse(character)));
             formula.CheckErrors();
